@@ -10,3 +10,5 @@ a.使用 Swift<br />
 b.使用 MVVM 架構<br />
 c.source code 保持彈性和重複性<br />
 
+![search-part1](https://user-images.githubusercontent.com/8057425/111491993-45fd0580-8777-11eb-927f-0ce9d7d3b2e9.gif)
+![search-part2](https://user-images.githubusercontent.com/8057425/111492031-4dbcaa00-8777-11eb-9587-946c19d7402a.gif)
