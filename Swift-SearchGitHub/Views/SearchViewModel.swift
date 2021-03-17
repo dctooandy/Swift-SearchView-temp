@@ -46,7 +46,7 @@ class SearchViewModel: BaseViewModel {
     var usersDataArray :[UserResultDto] = []
     var nextPageUsersDataArray :[UserResultDto] = []
     var allSizeMode : [CellSizeMode] = [.helfHelf, .quarterHelf, .quarterQuarter]
-    var sizeArray : [(sizeMode:CellSizeMode ,userData:UserResultDto )] = []
+    var sizeArray : [(sizeMode:CellSizeMode ,userData:[UserResultDto] )] = []
     override init() {
         super.init()
         self.bind()
@@ -102,10 +102,38 @@ class SearchViewModel: BaseViewModel {
         }
     }
     func swipeData(currentData:[UserResultDto] ){
-        for data in currentData {
+        var passValue = false
+        for (index, element) in currentData.enumerated()
+        {
             if let size = allSizeMode.randomElement()
             {
-                sizeArray.append((sizeMode:size , userData: data))
+                switch size {
+                case .quarterQuarter:
+                    if passValue == true
+                    {
+                        passValue = false
+                    }else
+                    {
+                        if (index + 1) <= (currentData.count - 1)
+                        {
+                            sizeArray.append((sizeMode:size , userData: [element , currentData[index + 1] ]))
+                            passValue = true
+                        }else if index == (currentData.count - 1)
+                        {
+                            sizeArray.append((sizeMode:.quarterHelf , userData: [element]))
+                            passValue = true
+                        }
+                        
+                    }
+                default:
+                    if passValue == true
+                    {
+                        passValue = false
+                    }else
+                    {
+                        sizeArray.append((sizeMode:size , userData: [element]))
+                    }
+                }
             }
         }
     }
