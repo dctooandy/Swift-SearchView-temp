@@ -41,7 +41,10 @@ enum CellSizeMode:Int, CaseIterable {
 }
 class SearchViewModel: BaseViewModel {
     private var searchSuccessData = PublishSubject<Void>()
+    var currentPage: Int = 1
+    var isNeedLoadMore: Bool = false
     var usersDataArray :[UserResultDto] = []
+    var nextPageUsersDataArray :[UserResultDto] = []
     var allSizeMode : [CellSizeMode] = [.helfHelf, .quarterHelf, .quarterQuarter]
     var sizeArray : [(sizeMode:CellSizeMode ,userData:UserResultDto )] = []
     override init() {
@@ -62,23 +65,42 @@ class SearchViewModel: BaseViewModel {
     }
     func searchText(keyWords:String)
     {
-        Beans.searchServer.searchKeywords(keywords: keyWords).subscribeSuccess { [weak self](dto) in
+        Beans.searchServer.searchKeywords(keywords: keyWords ,page: currentPage).subscribeSuccess { [weak self](dto) in
+            
             if let data = dto
             {
-                self?.usersDataArray = data
+                self?.isNeedLoadMore = !data.isEmpty
+                if self?.currentPage == 1{
+                    self?.usersDataArray = data
+                }else{
+                    self?.nextPageUsersDataArray.removeAll()
+                    self?.nextPageUsersDataArray = data
+                }
                 self?.injectDataToArray()
             }
          }.disposed(by: disposeBag)
     }
+    
     func injectDataToArray()
     {
-        for data in usersDataArray {
+        if nextPageUsersDataArray.count > 0
+        {
+            swipeData(currentData: nextPageUsersDataArray)
+            usersDataArray += nextPageUsersDataArray
+        }else
+        {
+            swipeData(currentData: usersDataArray)
+        }
+        
+        self.searchSuccessData.onNext(())
+    }
+    func swipeData(currentData:[UserResultDto] ){
+        for data in currentData {
             if let size = allSizeMode.randomElement()
             {
                 sizeArray.append((sizeMode:size , userData: data))
             }
         }
-        self.searchSuccessData.onNext(())
     }
 }
 extension SearchViewModel
