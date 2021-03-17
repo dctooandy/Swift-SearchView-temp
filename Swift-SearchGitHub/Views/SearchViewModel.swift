@@ -61,6 +61,9 @@ class SearchViewModel: BaseViewModel {
     }
     func deleteAllData()
     {
+        currentPage = 1
+        nextPageUsersDataArray.removeAll()
+        usersDataArray.removeAll()
         sizeArray.removeAll()
     }
     func searchText(keyWords:String)
