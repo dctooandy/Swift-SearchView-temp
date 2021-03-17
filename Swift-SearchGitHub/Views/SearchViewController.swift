@@ -10,7 +10,7 @@ import UIKit
 
 class SearchViewController: BaseViewController, SearchBarViewCellDelegate {
     var viewModel = SearchViewModel()
-    
+    var isStartReloadData:Bool = false
     // 最上面的SearchBar
     var searchBarView : SearchBarView = {
         let view = SearchBarView()
@@ -32,7 +32,7 @@ class SearchViewController: BaseViewController, SearchBarViewCellDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = #colorLiteral(red: 0.8901960784, green: 0.9921568627, blue: 0.9921568627, alpha: 1)
-        viewModel.randomArray()
+//        viewModel.randomArray()
         setUpUI()
         bindModel()
     }
@@ -60,20 +60,22 @@ class SearchViewController: BaseViewController, SearchBarViewCellDelegate {
         }
     }
     func reloadDataSetion() {
-        viewModel.randomArray()
-        UIView.animate(withDuration: 0.25) {
-            self.tableView.alpha = 0
-        } completion: { (_) in
-            self.tableView.reloadData()
-            UIView.animate(withDuration: 0.25) {
-                self.tableView.alpha = 1
-            }
-        }
+//        viewModel.randomArray()
+//        UIView.animate(withDuration: 0.25) {
+//            self.tableView.alpha = 0
+//        } completion: { (_) in
+//            self.tableView.reloadData()
+//            UIView.animate(withDuration: 0.25) {
+//                self.tableView.alpha = 1
+//            }
+//        }
+        self.tableView.reloadData()
     }
     func bindModel()
     {
         viewModel.rxSearchSuccessData().subscribeSuccess { [weak self](_) in
             self?.reloadDataSetion()
+            self?.isStartReloadData = false
         }.disposed(by: disposeBag)
     }
 }
@@ -116,10 +118,13 @@ extension SearchViewController : UITableViewDelegate , UITableViewDataSource , U
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return viewModel.sizeArray[indexPath.row].sizeMode.cellSize.height
     }
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        guard scrollView.contentSize.height > tableView.frame.height else {return}
-        if scrollView.contentSize.height - (scrollView.frame.size.height + scrollView.contentOffset.y) <= -10 && viewModel.isNeedLoadMore{
-            print("Pull up to load more")
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let totalArrayCount = (viewModel.sizeArray.count > 2 ? viewModel.sizeArray.count : 2)
+        let indexPath = IndexPath(row: totalArrayCount - 2, section: 0)
+        
+        if viewModel.sizeArray.count > 0, self.tableView.indexPathsForVisibleRows?.contains(indexPath) == true , viewModel.isNeedLoadMore && isStartReloadData == false
+        {
+            isStartReloadData = true
             viewModel.currentPage += 1
             viewModel.searchText(keyWords: searchKeyWords)
         }
