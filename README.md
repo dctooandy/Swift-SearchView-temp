@@ -21,6 +21,6 @@ iOS 相容版本 : iOS 11或以上版本 <br />
 4. 如果有什麼錯誤也盡可能處理<br />
 5. 可使用網路、影像處理等相關的 library<br />
 
+![Search-Part1](https://user-images.githubusercontent.com/8057425/111513025-55864980-878b-11eb-9732-3af06dff099b.gif)
+![Search-Part2](https://user-images.githubusercontent.com/8057425/111513032-58813a00-878b-11eb-8c5c-de22907724e1.gif)
 
-![Search-Part1](https://user-images.githubusercontent.com/8057425/111502951-48645d00-8781-11eb-9e45-e395bb8cd9eb.gif)
-![Search-Part2](https://user-images.githubusercontent.com/8057425/111502963-4ac6b700-8781-11eb-9366-89c5caeab3f7.gif)
