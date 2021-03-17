@@ -75,11 +75,17 @@ class SearchViewModel: BaseViewModel {
                 self?.isNeedLoadMore = !data.isEmpty
                 if self?.currentPage == 1{
                     self?.usersDataArray = data
+                    self?.injectDataToArray()
                 }else{
                     self?.nextPageUsersDataArray.removeAll()
-                    self?.nextPageUsersDataArray = data
+                    if self?.isNeedLoadMore == true
+                    {
+                        self?.nextPageUsersDataArray = data
+                        self?.injectDataToArray()
+                    }
                 }
-                self?.injectDataToArray()
+                self?.searchSuccessData.onNext(())
+                
             }
          }.disposed(by: disposeBag)
     }
@@ -94,8 +100,6 @@ class SearchViewModel: BaseViewModel {
         {
             swipeData(currentData: usersDataArray)
         }
-        
-        self.searchSuccessData.onNext(())
     }
     func swipeData(currentData:[UserResultDto] ){
         for data in currentData {
