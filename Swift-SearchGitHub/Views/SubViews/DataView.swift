@@ -14,7 +14,7 @@ import Lottie
 class DataView: UIView
 {
     var avatorImageView : UIImageView = {
-        let img = UIImageView(image: UIImage(named: ""))
+        let img = UIImageView(image: UIImage())
         img.backgroundColor = .clear
         return img
     }()
