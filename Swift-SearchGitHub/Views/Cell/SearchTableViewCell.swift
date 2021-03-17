@@ -66,10 +66,11 @@ class SearchTableViewCell: UITableViewCell {
     {
         
     }
-    func config(data:CellSizeMode , usersData:UserResultDto)
+    func config(data:CellSizeMode , usersData:[UserResultDto])
     {
-        if let avatorUrl = usersData.avatar_url,
-           let nameString = usersData.login
+        if let firstUsersData = usersData.first,
+            let avatorUrl = firstUsersData.avatar_url,
+           let nameString = firstUsersData.login
         {
             var viewWidth = Views.screenWidth - pWidth(20)
             switch data {
@@ -82,7 +83,17 @@ class SearchTableViewCell: UITableViewCell {
                 secondDataView.isHidden = false
             }
             firstDataView.configForDataView(color: data.cellBGColor, imgURL: avatorUrl, nameString: nameString ,viewWidth : viewWidth)
-            secondDataView.configForDataView(color: data.cellBGColor, imgURL: avatorUrl, nameString: nameString ,viewWidth : viewWidth)
+            if data == .quarterQuarter ,
+               usersData.count > 1,
+               let lastUsersData = usersData.last,
+               let avatorUrl = lastUsersData.avatar_url,
+              let nameString = lastUsersData.login
+            {
+                secondDataView.configForDataView(color: data.cellBGColor, imgURL: avatorUrl, nameString: nameString ,viewWidth : viewWidth)
+            }else
+            {
+                secondDataView.stopLoadIngAnimation()
+            }
         }
     }
 }
