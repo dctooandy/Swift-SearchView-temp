@@ -101,7 +101,7 @@ extension SearchViewController
     }
 }
 
-extension SearchViewController : UITableViewDelegate , UITableViewDataSource
+extension SearchViewController : UITableViewDelegate , UITableViewDataSource , UIScrollViewDelegate
 {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.sizeArray.count
@@ -115,5 +115,13 @@ extension SearchViewController : UITableViewDelegate , UITableViewDataSource
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return viewModel.sizeArray[indexPath.row].sizeMode.cellSize.height
+    }
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        guard scrollView.contentSize.height > tableView.frame.height else {return}
+        if scrollView.contentSize.height - (scrollView.frame.size.height + scrollView.contentOffset.y) <= -10 && viewModel.isNeedLoadMore{
+            print("Pull up to load more")
+            viewModel.currentPage += 1
+            viewModel.searchText(keyWords: searchKeyWords)
+        }
     }
 }
