@@ -3,7 +3,7 @@
 # UserStory
 
 iOS 相容版本 : iOS 11或以上版本 <br />
-適配機型 : iPhone8 plus/iPhone11 /iPhone12 /iPhoneSE
+已模擬機型 : iPhone8 plus/iPhone11 /iPhone12 /iPhoneSE
 
 主要功能:
 
